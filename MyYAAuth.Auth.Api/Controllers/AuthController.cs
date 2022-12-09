@@ -1,67 +1,59 @@
+using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using MyYAAuth.Auth.Api.Models;
+using MyYAAuth.Auth.Common;
+using MyYAAuth.Auth.Api.Services;
+using Microsoft.AspNetCore.Authorization;
 
-namespace MyYAAuth.Auth.Api;
-
-[ApiController]
-[Route("api/[controller]")]
-public class AuthController : ControllerBase
+namespace MyYAAuth.Auth.Api.Controllers
 {
-    private readonly ILogger<AuthController> _logger;
 
-    /*
-    e2d80add-3db9-465e-b00b-cc0be173d76a
-    a834d832-d2b6-44e8-ab1f-bd12423c8fbd
-    a9ac59ee-342c-4f7a-a7bb-7f6242bb2ef9
-    a8173529-e083-4ee5-8f9b-a1ffee140f5c
-    */
+    [ApiController]
+    [Route("api/[controller]")]
+    public class AuthController : ControllerBase
+    {
+        private readonly ILogger<AuthController> _logger;
 
-    private List<Account> Accounts = new List<Account>(){
-        new Account()
+        
+        private readonly IOptions<AuthOptions> _authOptions;
+        private readonly IAccountsService accountsService;
+
+        public AuthController(ILogger<AuthController> logger, IOptions<AuthOptions> authOptions, IAccountsService accountsService)
         {
-            Id = Guid.Parse("e2d80add-3db9-465e-b00b-cc0be173d76a"),
-            Email = "user@email.com",
-            Password = "user",
-            Roles = new Role[] {Role.User}
-        },
-        new Account()
-        {
-            Id = Guid.Parse("a834d832-d2b6-44e8-ab1f-bd12423c8fbd"),
-            Email = "user2@email.com",
-            Password = "user2",
-            Roles = new Role[] {Role.User}
-        },
-        new Account()
-        {
-            Id = Guid.Parse("a9ac59ee-342c-4f7a-a7bb-7f6242bb2ef9"),
-            Email = "admin@email.com",
-            Password = "admin",
-            Roles = new Role[] {Role.Admin}
+            this.accountsService = accountsService;
+            _authOptions = authOptions;
+            _logger = logger;
         }
 
-    };
+        [Route("login")]
+        [HttpPost]
+        [AllowAnonymous]
+        public IActionResult Login([FromBody] Login request)
+        {
+            var user = AuthenticateUser(request.Email, request.Password);
 
-    public AuthController(ILogger<AuthController> logger)
-    {
-        _logger = logger;
-    }
+            if (user != null)
+            {
+                var token = JwtGeneratorsService.GenerateJWT(_authOptions.Value, user);
+                //var token2 = JwtGeneratorsService.GenerateJWT2(_authOptions.Value, user);
 
-    [Route("login")]
-    [HttpPost]
-    public IActionResult Login([FromBody] Login request)
-    {
-        var user = AuthenticateUser(request.Email, request.Password);
+                return Ok(
+                    new
+                    {
+                        access_token = token
+                    }
+                );
+            }
 
-        if(user != null){
-            //generate token
-
+            return Unauthorized();
         }
 
-        return Unauthorized();
-    }
-
-    private Account AuthenticateUser(string email, string password){
-        return Accounts.SingleOrDefault(u => u.Email == email && u.Password == password);
+        private Account AuthenticateUser(string email, string password)
+        {
+            return accountsService.GetAccount(email, password); 
+        }
     }
 }

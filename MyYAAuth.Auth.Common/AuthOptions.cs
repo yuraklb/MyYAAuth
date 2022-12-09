@@ -1,4 +1,6 @@
-﻿
+﻿using System.Text;
+using Microsoft.IdentityModel.Tokens;
+
 namespace MyYAAuth.Auth.Common
 {
     public class AuthOptions
@@ -11,9 +13,9 @@ namespace MyYAAuth.Auth.Common
 
         public int TokenLifetime { get; set; } //seconds
 
-        public SymmetricSecurityKey GetSymmetricSerurityKey()
+        public SymmetricSecurityKey GetSymmetricSecurityKey()
         {
-            return new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Secret));
+            return new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Secret));
         }
     }
 }

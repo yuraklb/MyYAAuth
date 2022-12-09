@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyYAAuth.Auth.Api", "MyYAAu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyYAAuth.Auth.Common", "MyYAAuth.Auth.Common\MyYAAuth.Auth.Common.csproj", "{2BFF285E-F8A0-4C26-8712-23658ECC3531}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyYAAuth.Resource.Api", "MyYAAuth.Resource.Api\MyYAAuth.Resource.Api.csproj", "{46497155-BD98-4C11-80D6-7E772F42D48E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{2BFF285E-F8A0-4C26-8712-23658ECC3531}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2BFF285E-F8A0-4C26-8712-23658ECC3531}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2BFF285E-F8A0-4C26-8712-23658ECC3531}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46497155-BD98-4C11-80D6-7E772F42D48E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46497155-BD98-4C11-80D6-7E772F42D48E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46497155-BD98-4C11-80D6-7E772F42D48E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46497155-BD98-4C11-80D6-7E772F42D48E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
